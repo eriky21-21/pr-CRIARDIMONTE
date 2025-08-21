@@ -27,7 +27,7 @@ async function logout() {
 // ---- FUNÇÃO PARA UPLOAD DE MODELOS ----
 async function uploadModelo(file, filename) {
   const { data, error } = await supabase.storage
-    .from('modelos') // nome do bucket no Supabase
+    .from('modelos') // bucket criado no Supabase
     .upload(filename, file, {
       cacheControl: '3600',
       upsert: true,
@@ -43,16 +43,15 @@ async function uploadModelo(file, filename) {
   return data
 }
 
-// ---- COMPONENTE DE LOGIN ----
-export default function Login() {
+// ---- COMPONENTE ----
+export default function Login({ onLogin }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const [file, setFile] = useState(null)
 
   const handleLogin = async () => {
     const loggedUser = await login(email, password)
-    if (loggedUser) setUser(loggedUser)
+    if (loggedUser) onLogin(loggedUser)
   }
 
   const handleUpload = async () => {
@@ -63,42 +62,32 @@ export default function Login() {
 
   return (
     <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-      {!user ? (
-        <div>
-          <h2>Login</h2>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', padding: '5px' }}
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', padding: '5px' }}
-          />
-          <button onClick={handleLogin} style={{ padding: '5px 10px' }}>Login</button>
-        </div>
-      ) : (
-        <div>
-          <h2>Bem-vindo!</h2>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Cadastro:</strong> {new Date(user.created_at).toLocaleDateString()}</p>
+      <h2>Login</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        style={{ display: 'block', marginBottom: '10px', padding: '5px' }}
+      />
+      <input
+        type="password"
+        placeholder="Senha"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        style={{ display: 'block', marginBottom: '10px', padding: '5px' }}
+      />
+      <button onClick={handleLogin} style={{ padding: '5px 10px' }}>Login</button>
 
-          <div style={{ marginTop: '20px' }}>
-            <h3>Enviar Modelo</h3>
-            <input type="file" onChange={e => setFile(e.target.files[0])} />
-            <button onClick={handleUpload} style={{ marginLeft: '10px', padding: '5px 10px' }}>
-              Enviar
-            </button>
-          </div>
+      <div style={{ marginTop: '20px' }}>
+        <h3>Enviar Modelo</h3>
+        <input type="file" onChange={e => setFile(e.target.files[0])} />
+        <button onClick={handleUpload} style={{ marginLeft: '10px', padding: '5px 10px' }}>
+          Enviar
+        </button>
+      </div>
 
-          <button onClick={logout} style={{ marginTop: '20px', padding: '5px 10px' }}>Logout</button>
-        </div>
-      )}
+      <button onClick={logout} style={{ marginTop: '20px', padding: '5px 10px' }}>Logout</button>
     </div>
   )
 }
