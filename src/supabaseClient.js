@@ -1,8 +1,8 @@
-// supabaseClient.js
+// src/supabaseClient.js
 import { createClient } from '@supabase/supabase-js'
 
-// Variáveis de ambiente (confira no Railway)
-const supabaseUrl = process.env.SUPABASE_URL
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY
+// ⚠️ Railway precisa ter essas variáveis no painel
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
