@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import Login from "./Login";
-import Dashboard from "./Dashboard";
+import React, { useState } from 'react'
+import Login from './Login'
+import Dashboard from './Dashboard'
 
 export default function App() {
-  const [logado, setLogado] = useState(false);
+  const [user, setUser] = useState(null)
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      {!logado ? (
-        <Login onLogin={() => setLogado(true)} />
+    <div>
+      {!user ? (
+        <Login onLogin={setUser} />
       ) : (
-        <Dashboard onLogout={() => setLogado(false)} />
+        <Dashboard user={user} />
       )}
     </div>
-  );
+  )
 }
